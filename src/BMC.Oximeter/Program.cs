@@ -107,7 +107,7 @@ namespace BMC.Oximeter
                 screen.DrawString($"Oksigen : {SPO2} %", font, new SolidBrush(Color.Blue), 10, 80);
                 screen.DrawString($"Pulse Rate : {PulseRate}", font, new SolidBrush(Color.Yellow), 10, 110);
                 screen.DrawString($"Signal Strength : {SignalStrength}", font, new SolidBrush(Color.Red), 50, 140);
-
+                screen.Flush();
             }, null, 1000, 1000);
 
             Thread.Sleep(Timeout.Infinite);
