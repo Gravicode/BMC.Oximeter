@@ -99,6 +99,7 @@ namespace BMC.Oximeter
             this.workerThread.Start();
         }
         static byte[] tmp = new byte[1];
+        static int b;
         private void DoWork()
         {
             bool sync = false;
@@ -110,7 +111,8 @@ namespace BMC.Oximeter
                 if (!sync)
                 {
                     
-                    int b = this.serialPort.Read(tmp);
+                    int bcount = this.serialPort.Read(tmp);
+                    b = tmp[0];
                     if (b < 0)
                     {
                         Thread.Sleep(100);
@@ -188,6 +190,7 @@ namespace BMC.Oximeter
                 }
 
                 this.OnHeartbeat(this, this.LastReading);
+                
             }
         }
         void DebugPrint(string message)

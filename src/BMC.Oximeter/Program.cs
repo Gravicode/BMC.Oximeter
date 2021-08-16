@@ -71,7 +71,7 @@ namespace BMC.Oximeter
             pin4.SetDriveMode(GpioPinDriveMode.Output);
             pin4.Write(GpioPinValue.High);
 
-            oxi = new PulseOximeter(SC20100.UartPort.Uart1);
+            oxi = new PulseOximeter(SC20100.UartPort.Uart3);
             
             oxi.ProbeAttached += Oxi_ProbeAttached;
             oxi.ProbeDetached += Oxi_ProbeDetached;
@@ -104,9 +104,9 @@ namespace BMC.Oximeter
                 screen.FillEllipse(new SolidBrush(System.Drawing.Color.FromArgb
                     (128, 0, 255, 0)), 40, 0, 80, 64);
 
-                screen.DrawString($"Oksigen : {SPO2} %", font, new SolidBrush(Color.Blue), 10, 80);
-                screen.DrawString($"Pulse Rate : {PulseRate}", font, new SolidBrush(Color.Yellow), 10, 110);
-                screen.DrawString($"Signal Strength : {SignalStrength}", font, new SolidBrush(Color.Red), 50, 140);
+                screen.DrawString($"Oksigen: {SPO2} %", font, new SolidBrush(Color.Blue), 10, 70);
+                screen.DrawString($"Pulse Rate: {PulseRate}", font, new SolidBrush(Color.Yellow), 10, 90);
+                screen.DrawString($"Signal: {SignalStrength}", font, new SolidBrush(Color.Red), 10, 110);
                 screen.Flush();
             }, null, 1000, 1000);
 
@@ -137,7 +137,13 @@ namespace BMC.Oximeter
 
         private static void Graphics_OnFlushEvent(Graphics sender, byte[] data, int x, int y, int width, int height, int originalWidth)
         {
-            st7735.DrawBuffer(data);
+            try
+            {
+                st7735.DrawBuffer(data);
+            }
+            catch (Exception)
+            {
+            }
         }
     }
 }
