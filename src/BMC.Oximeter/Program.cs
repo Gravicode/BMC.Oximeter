@@ -77,7 +77,12 @@ namespace BMC.Oximeter
             oxi.ProbeDetached += Oxi_ProbeDetached;
             oxi.Heartbeat += Oxi_Heartbeat;
             screen.Flush();
-
+            var brush = new SolidBrush(Color.Red);
+            var pen = new Pen(brush);
+            var brush2 = new SolidBrush(Color.Purple);
+            var pen2 = new Pen(brush2);
+            var brush3 = new SolidBrush(Color.Blue);
+            var pen3 = new Pen(brush3);
             Timer timer = new Timer((a)=> {
                 if (PulseRate <= 0 || SPO2<=0 || SignalStrength <= 0)
                 {
@@ -94,7 +99,7 @@ namespace BMC.Oximeter
                 }
 
                 screen.Clear();
-
+                /*
                 screen.FillEllipse(new SolidBrush(System.Drawing.Color.FromArgb
                (255, 255, 0, 0)), 0, 0, 80, 64);
 
@@ -103,15 +108,29 @@ namespace BMC.Oximeter
 
                 screen.FillEllipse(new SolidBrush(System.Drawing.Color.FromArgb
                     (128, 0, 255, 0)), 40, 0, 80, 64);
+                */
+                
+                screen.DrawRectangle(pen,0,0,160,2);
+                screen.DrawRectangle(pen2, 0, 4, 160, 2);
+                screen.DrawRectangle(pen3, 0, 7, 160, 2);
 
-                screen.DrawString($"Oksigen: {SPO2} %", font, new SolidBrush(Color.Blue), 10, 70);
-                screen.DrawString($"Pulse Rate: {PulseRate}", font, new SolidBrush(Color.Yellow), 10, 90);
-                screen.DrawString($"Signal: {SignalStrength}", font, new SolidBrush(Color.Red), 10, 110);
+                if (SPO2 < 90)
+                    Hasil = "Kamu Covid";
+                else if (SPO2 <= 95)
+                    Hasil = "Ga Sehat!";
+                else
+                    Hasil = "Sehat Jos!";
+                screen.DrawString($"Oksigen: {SPO2} %", font, new SolidBrush(Color.Blue), 10, 20);
+                screen.DrawString($"Pulse Rate: {PulseRate}", font, new SolidBrush(Color.Yellow), 10, 40);
+                screen.DrawString($"Signal: {SignalStrength}", font, new SolidBrush(Color.Red), 10, 60);
+                screen.DrawString($"Attached: {(oxi.IsProbeAttached?"Ya":"Tidak")}", font, new SolidBrush(Color.White), 10, 80);
+                screen.DrawString($"Hasil: {Hasil}", font, new SolidBrush(Color.White), 10, 100);
                 screen.Flush();
             }, null, 1000, 1000);
 
             Thread.Sleep(Timeout.Infinite);
         }
+        static string Hasil;
         static int PulseRate=-1, SignalStrength=-1, SPO2=-1;
         private static void Oxi_Heartbeat(PulseOximeter sender, PulseOximeter.Reading e)
         {
